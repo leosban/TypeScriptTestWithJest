@@ -1,29 +1,51 @@
-// Arquivo de teste criado para criar um test
+// Testando a classe persistency com SpyOn
+import { Persistency } from './persistency';
 
-// Podemos seperar testes em bloco para separar por descrição
+describe('Persistency', () => {
+  // Método para limpar os mocks, depois de cada teste
+  afterEach(() => jest.clearAllMocks());
 
-// Podemos criar os testes com 'it()' ou 'test()', ambos são iguais
+  it('Shoud return undefined', () => {
+    // Sempre chamamos a classe que está sendo testada de SUT-(System under test)
+    const sut = new Persistency();
 
-// Primeiro parametro descreve o teste, segundo parametro criamos a função
-
-// Podemos inverter a checagem através do '.not' antes do '.toBe()
-
-// Podemos de grupos de testes, dentro de uma suíte de testes, com o 'describe()'
-// sendo o primeiro parametro a descrição, e o segundo params uma função, com os
-// testes de fato.
-// Dessa forma os testes ficam agrupados e mais fáceis de entender, se houver
-// algum erro
-
-describe('Testing something', () => {
-  it('Should return one', () => {
-    const number = 1;
-    expect(number).toBe(1);
+    // Checagem se o 'saveOrder()' dentro de persistency, seja undefined.
+    expect(sut.saveOrder()).toBeUndefined();
   });
-});
 
-describe('Testing another something', () => {
-  test('Should return a name', () => {
-    const name = 'Leônidas';
-    expect(name).toBe('Leônidas');
+  // Teste para checagem de uma chamada do console.log
+  it('Shoud call console.log once', () => {
+    // Sempre chamamos a classe que está sendo testada de SUT-(System under test)
+    const sut = new Persistency();
+
+    // Variável criada como espiã do 'console.log'
+    // passamos o objeto 'console' e o método vem entre aspas
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    // Chamada da sut.saveOrder(), para fazer com que a checagem funcione
+    // para que o 'console.log' seja chamado, pelo menos uma vez
+    sut.saveOrder();
+
+    // Checagem do números de vezes que a variável irá ser chamada
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+  });
+
+  // Teste de uma segunda chamada do 'console.log' com o método 'afterEach()'
+  // implementado
+  // Irá fazer a checagem da msg dentro do 'console.log' dentro da função
+  it('Shoud call console.log with "Order saved successfully"', () => {
+    // Sempre chamamos a classe que está sendo testada de SUT-(System under test)
+    const sut = new Persistency();
+
+    // Variável criada como espiã do 'console.log'
+    // passamos o objeto 'console' e o método 'log' entre aspas
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    // Chamada da sut.saveOrder(), para fazer com que a checagem funcione
+    // para que o 'console.log' seja chamado
+    sut.saveOrder();
+
+    // Checagem da msg dentro do console.log
+    expect(consoleSpy).toHaveBeenCalledWith('Order saved successfully');
   });
 });
